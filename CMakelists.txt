@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.11)
+project(Games_Ass)
+
+add_subdirectory(Ass0)
+add_subdirectory(Ass1)
+# add_subdirectory(Ass2)
+# add_subdirectory(Ass3)
+# add_subdirectory(Ass4)
+# add_subdirectory(Ass5)
+# add_subdirectory(Ass6)
+# add_subdirectory(Ass7)
+# add_subdirectory(Ass8)
+# add_subdirectory(FinalProject)
