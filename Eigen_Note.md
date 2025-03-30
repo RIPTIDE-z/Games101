@@ -115,7 +115,7 @@ Matrix<int, 1, 5> c = {1, 2, 3, 4, 5};
 - 初始化具有固定大小或运行时大小的矩阵和向量的时候，系数必须**按行分组**传递
 
 ```cpp
-MatrixXi a {    
+MatrixXi a {  
   {1, 2},     // 第一行
   {3, 4}      // 第二行
 };
@@ -125,20 +125,31 @@ Matrix<double, 2, 3> b {
   {5, 6, 7},
 };
 ```
+- 实际上`Eigen::Matrix<T, Rows, Cols>` 底层是一个 `Rows * Cols` 的 一维数组，而 `{ {x, x, x}, {x, x, x} }` 可以被解析成 `std::array<std::array<T, Cols>, Rows>`，C++11 允许 `std::array` 适配此类初始化，Eigen 支持将 `std::array` 作为参数
 
 - 对于列向量或行向量，允许隐式转置。这意味着可以**从单行初始化列向量**
 
 ```cpp
-VectorXd a {{1.5, 2.5, 3.5}};           
+VectorXd a {{1.5, 2.5, 3.5}};       
 // 具有 3 个系数的列向量
 
 RowVectorXd b {{1.0, 2.0, 3.0, 4.0}};   
 // 具有 4 个系数的行向量
 ```
 
+```cpp
+Matrix3f M = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+}
+```
+
+- 这样初始化是不行的，Eigen 的构造函数是 **explicit** 的，因此不允许拷贝初始化
+
 ---
 
-#### 逗号初始化
+#### << 初始化(最佳)
 
 ```cpp
 Matrix3f m;
@@ -424,6 +435,17 @@ and after being transposed:
 3 6
 ```
 
+---
+
+## 矩阵的逆
+
+- `inverse`
+- 对于规模小于4x4的矩阵使用 `computeInverseWithCheck(inverse, invertible)`
+  - inverse存储逆矩阵，invertible是bool值，true代表此矩阵可逆
+- 不要对int类型矩阵求逆，这可能会丢失精度
+
+---
+
 ## 矩阵与矩阵/向量乘法
 
 `*` `*=`
@@ -468,8 +490,20 @@ Now mat is :
 15 22
 ```
 
-## 点积和叉积
+---
 
+## 归一化矢量
+
+- normalized()
+  - 返回新的归一化后的矢量，不改变原矢量
+- normalize()
+  - 直接将原向量归一化，返回void
+
+---
+
+## 模、点积和叉积
+
+- 求和 `sum()`
 - 点积 `dot()`
 - 叉积 `cross()`
 
@@ -497,6 +531,8 @@ Cross product:
  1
 ```
 
+---
+
 ## 归约操作
 
 - 求和 `sum()`
@@ -507,7 +543,7 @@ Cross product:
 ```cpp
 #include <iostream>
 #include <Eigen/Dense>
- 
+
 using namespace std;
 int main()
 {
@@ -529,3 +565,5 @@ Here is mat.mean():      2.5
 Here is mat.minCoeff():  1
 Here is mat.maxCoeff():  4
 ```
+
+---
