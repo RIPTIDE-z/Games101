@@ -28,3 +28,11 @@
 - Notice
 
   1. Eigen库在调试时的可视化需要`eigen.natvis`文件支持，详细参考[Eigen_Note](Eigen_Note.md)
+
+
+---
+
+# ASS0
+
+- 实际上头文件只需要包含`<Eigen/Dense>`，`Core`是被包含在`Dense`里的
+- `extra.cpp` 演示额外的Eigen操作，包括求逆，求转置，叉积，归一化向量
