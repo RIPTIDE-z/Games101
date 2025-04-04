@@ -30,7 +30,7 @@ void rst::rasterizer::draw_line(Eigen::Vector3f begin, Eigen::Vector3f end)
     auto x2 = end.x();
     auto y2 = end.y();
 
-    Eigen::Vector3f line_color = {255, 255, 255};
+    Eigen::Vector3f line_color = {245, 197, 217};
 
     int x,y,dx,dy,dx1,dy1,px,py,xe,ye,i;
 
@@ -141,6 +141,7 @@ void rst::rasterizer::draw(rst::pos_buf_id pos_buffer, rst::ind_buf_id ind_buffe
     float f2 = (100 + 0.1) / 2.0;
 
     Eigen::Matrix4f mvp = projection * view * model;
+    
     for (auto& i : ind)
     {
         Triangle t;
@@ -230,4 +231,3 @@ void rst::rasterizer::set_pixel(const Eigen::Vector3f& point, const Eigen::Vecto
     auto ind = (height-point.y())*width + point.x();
     frame_buf[ind] = color;
 }
-

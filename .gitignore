@@ -7,3 +7,5 @@ OpenCV-mingw/
 CMakePresets.json
 out/
 FinalProject/References/
+*.7z
+OpenCV-msvc/

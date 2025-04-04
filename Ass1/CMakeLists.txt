@@ -5,6 +5,7 @@ project(Rasterizer1)
 # windows
 include_directories( "../Eigen/include")
 list(APPEND CMAKE_PREFIX_PATH "../OpenCV-mingw/x64/mingw/lib")
+# list(APPEND CMAKE_PREFIX_PATH "../OpenCV-msvc/x64/vc17/lib")
 
 # linux
 # include_directories(/usr/local/include)
