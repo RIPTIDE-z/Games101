@@ -1,11 +1,10 @@
 .history/
 build/
 .cache/
-Eigen/
-OpenCV-mingw/
 .vs/
 CMakePresets.json
 out/
 FinalProject/References/
 *.7z
 OpenCV-msvc/
+bin/

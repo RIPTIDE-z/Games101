@@ -51,9 +51,9 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     // Create the projection matrix for the given parameters.
     // Then return it.
     Eigen::Matrix4f trans_ortho;
-    trans_ortho << zNear, 0, 0, 0, 
-                   0, zNear, 0, 0, 
-                   0, 0, zNear + zFar, -zNear * zFar, 
+    trans_ortho << -zNear, 0, 0, 0, 
+                   0, -zNear, 0, 0, 
+                   0, 0, -zNear - zFar, -zNear * zFar, 
                    0, 0, 1, 0;
 
     float h = 2 * zNear * std::tan((eye_fov/2) * (MY_PI/180.0f));
@@ -105,6 +105,7 @@ int main(int argc, const char** argv)
 
     int key = 0;
     int frame_count = 0;
+    int eye_fov = 45;
 
     if (command_line) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
@@ -127,7 +128,7 @@ int main(int argc, const char** argv)
 
         r.set_model(get_model_matrix(angle));
         r.set_view(get_view_matrix(eye_pos));
-        r.set_projection(get_projection_matrix(45, 1, 0.1, 50));
+        r.set_projection(get_projection_matrix(eye_fov, 1, 0.1, 50));
 
         r.draw(pos_id, ind_id, rst::Primitive::Triangle);
 
@@ -143,6 +144,13 @@ int main(int argc, const char** argv)
         }
         else if (key == 'd') {
             angle -= 10;
+        }
+
+        if (key == 'w') {
+            eye_fov += 5;
+        }
+        else if (key == 's') {
+            eye_fov -= 5;
         }
     }
 

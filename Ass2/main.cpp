@@ -12,10 +12,10 @@ Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
     Eigen::Matrix4f translate;
-    translate << 1,0,0,-eye_pos[0],
-                 0,1,0,-eye_pos[1],
-                 0,0,1,-eye_pos[2],
-                 0,0,0,1;
+    translate << 1, 0, 0, -eye_pos[0],
+                 0, 1, 0, -eye_pos[1],
+                 0, 0, 1, -eye_pos[2],
+                 0, 0, 0, 1;
 
     view = translate*view;
 
@@ -31,7 +31,31 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar)
 {
     // TODO: Copy-paste your implementation from the previous assignment.
-    Eigen::Matrix4f projection;
+    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+
+    Eigen::Matrix4f trans_ortho;
+    trans_ortho << -zNear, 0, 0, 0, 
+                   0, -zNear, 0, 0, 
+                   0, 0, -zNear - zFar, -zNear * zFar, 
+                   0, 0, 1, 0;
+
+    float h = 2 * zNear * std::tan((eye_fov/2) * (MY_PI/180.0f));
+    float l = zFar - zNear;
+    float w = h * aspect_ratio;
+
+    Eigen::Matrix4f ortho_translate;
+    ortho_translate << 1, 0, 0, 0, 
+                       0, 1, 0, 0, 
+                       0, 0, 1, 0, 
+                       0, 0, 0, 1;
+
+    Eigen::Matrix4f ortho_scale;
+    ortho_scale << 2/w, 0, 0, 0, 
+                   0, 2/h, 0, 0, 
+                   0, 0, 2/l, 0, 
+                   0, 0, 0, 1;
+
+    projection = ortho_scale * ortho_translate * trans_ortho * projection;
 
     return projection;
 }
@@ -58,6 +82,9 @@ int main(int argc, const char** argv)
                     {2, 0, -2},
                     {0, 2, -2},
                     {-2, 0, -2},
+                    {1, 1.8, -3},
+                    {-1, -1.5, -3},
+                    {1, -1, -3},
                     {3.5, -1, -5},
                     {2.5, 1.5, -5},
                     {-1, 0.5, -5}
@@ -66,14 +93,18 @@ int main(int argc, const char** argv)
     std::vector<Eigen::Vector3i> ind
             {
                     {0, 1, 2},
-                    {3, 4, 5}
+                    {3, 4, 5},
+                    {6, 7, 8}
             };
 
     std::vector<Eigen::Vector3f> cols
             {
-                    {217.0, 238.0, 185.0},
-                    {217.0, 238.0, 185.0},
-                    {217.0, 238.0, 185.0},
+                    {212.0, 175.0, 55.0},
+                    {212.0, 175.0, 55.0},
+                    {212.0, 175.0, 55.0},
+                    {255.0, 192.0, 203.0},
+                    {255.0, 192.0, 203.0},
+                    {255.0, 192.0, 203.0},
                     {185.0, 217.0, 238.0},
                     {185.0, 217.0, 238.0},
                     {185.0, 217.0, 238.0}
@@ -118,7 +149,7 @@ int main(int argc, const char** argv)
         image.convertTo(image, CV_8UC3, 1.0f);
         cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
         cv::imshow("image", image);
-        key = cv::waitKey(10);
+        key = cv::waitKey(1);
 
         std::cout << "frame count: " << frame_count++ << '\n';
     }
