@@ -8,3 +8,6 @@ FinalProject/References/
 *.7z
 OpenCV-msvc/
 bin/
+!Ass1/bin/output.png
+!Ass1/bin/rotate180.png
+.vscode/

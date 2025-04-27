@@ -85,11 +85,9 @@ int main(int argc, const char** argv)
     if (argc >= 3) {
         command_line = true;
         angle = std::stof(argv[2]); // -r by default
-        if (argc == 4) {
+        if (argc >= 4) {
             filename = std::string(argv[3]);
         }
-        else
-            return 0;
     }
 
     rst::rasterizer r(700, 700);
@@ -118,7 +116,11 @@ int main(int argc, const char** argv)
         cv::Mat image(700, 700, CV_32FC3, r.frame_buffer().data());
         image.convertTo(image, CV_8UC3, 1.0f);
 
-        cv::imwrite(filename, image);
+        std::cout << "Saving image to: " << filename << std::endl;
+        bool success = cv::imwrite(filename, image);
+        std::cout << "Write result: " << (success ? "success" : "failed") << std::endl;
+
+        // cv::imwrite(filename, image);
 
         return 0;
     }
