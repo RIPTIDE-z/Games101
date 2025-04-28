@@ -174,8 +174,6 @@ Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload& payload)
     return result_color * 255.f;
 }
 
-
-
 Eigen::Vector3f displacement_fragment_shader(const fragment_shader_payload& payload)
 {
     
@@ -222,7 +220,6 @@ Eigen::Vector3f displacement_fragment_shader(const fragment_shader_payload& payl
 
     return result_color * 255.f;
 }
-
 
 Eigen::Vector3f bump_fragment_shader(const fragment_shader_payload& payload)
 {
@@ -297,7 +294,7 @@ int main(int argc, const char** argv)
     auto texture_path = "hmap.jpg";
     r.set_texture(Texture(obj_path + texture_path));
 
-    std::function<Eigen::Vector3f(fragment_shader_payload)> active_shader = phong_fragment_shader;
+    std::function<Eigen::Vector3f(fragment_shader_payload)> active_shader = normal_fragment_shader;
 
     if (argc >= 2)
     {

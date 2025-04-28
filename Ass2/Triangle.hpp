@@ -29,9 +29,4 @@ public:
     std::array<Vector4f, 3> toVector4() const;
 };
 
-
-
-
-
-
 #endif //RASTERIZER_TRIANGLE_H
