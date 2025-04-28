@@ -33,23 +33,32 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     // TODO: Copy-paste your implementation from the previous assignment.
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
 
-    Eigen::Matrix4f trans_ortho;
-    trans_ortho << -zNear, 0, 0, 0, 
-                   0, -zNear, 0, 0, 
-                   0, 0, -zNear - zFar, -zNear * zFar, 
-                   0, 0, 1, 0;
+    // Eigen::Matrix4f trans_ortho;
+    // trans_ortho << -zNear, 0, 0, 0, 
+    //                0, -zNear, 0, 0, 
+    //                0, 0, -zNear - zFar, -zNear * zFar, 
+    //                0, 0, 1, 0;
 
-    float h = 2 * zNear * std::tan((eye_fov/2) * (MY_PI/180.0f));
-    float l = zFar - zNear;
-    float w = h * aspect_ratio;
+    // float h = 2 * zNear * std::tan((eye_fov/2) * (MY_PI/180.0f));
+    // float l = zFar - zNear;
+    // float w = h * aspect_ratio;
 
-    Eigen::Matrix4f ortho_scale;
-    ortho_scale << 2/w, 0, 0, 0, 
-                   0, 2/h, 0, 0, 
-                   0, 0, 2/l, 0, 
-                   0, 0, 0, 1;
+    // Eigen::Matrix4f ortho_scale;
+    // ortho_scale << 2/w, 0, 0, 0, 
+    //                0, 2/h, 0, 0, 
+    //                0, 0, 2/l, 0, 
+    //                0, 0, 0, 1;
 
-    projection = ortho_scale * trans_ortho * projection;
+    // projection = ortho_scale * trans_ortho * projection;
+
+    eye_fov = eye_fov / 180 * MY_PI;
+    Eigen::Matrix4f aspect_fovY;
+    float ty = -1.0f / tan(eye_fov / 2.0f);
+    aspect_fovY << (ty / aspect_ratio), 0, 0, 0,
+        0, ty, 0, 0,
+        0, 0, (zNear+zFar)/(zNear-zFar), (-2*zNear*zFar)/(zNear-zFar),
+        0, 0, 1, 0;
+    projection = aspect_fovY * projection;
 
     return projection;
 }
