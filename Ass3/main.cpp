@@ -52,39 +52,23 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     // TODO: Use the same projection matrix from the previous assignments
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
 
-    // Eigen::Matrix4f trans_ortho;
-    // trans_ortho << -zNear, 0, 0, 0, 
-    //                0, -zNear, 0, 0, 
-    //                0, 0, -zNear - zFar, -zNear * zFar, 
-    //                0, 0, 1, 0;
+    Eigen::Matrix4f persp_to_ortho;
+    persp_to_ortho << -zNear, 0, 0, 0, 
+                      0, -zNear, 0, 0, 
+                      0, 0, -zNear - zFar, zNear * zFar, 
+                      0, 0, 1, 0;
 
-    // float h = 2 * zNear * std::tan((eye_fov/2) * (MY_PI/180.0f));
-    // float l = zFar - zNear;
-    // float w = h * aspect_ratio;
+    float h = 2 * zNear * std::tan((eye_fov/2) * (MY_PI/180.0f));
+    float l = zFar - zNear;
+    float w = h * aspect_ratio;
 
-    // Eigen::Matrix4f ortho_translate;
-    // ortho_translate << 1, 0, 0, 0, 
-    //                    0, 1, 0, 0, 
-    //                    0, 0, 1, 0, 
-    //                    0, 0, 0, 1;
+    Eigen::Matrix4f ortho;
+    ortho << 2/w, 0, 0, 0, 
+             0, 2/h, 0, 0, 
+             0, 0, 2/l, (zNear + zFar)/2, 
+             0, 0, 0, 1;
 
-    // Eigen::Matrix4f ortho_scale;
-    // ortho_scale << 2/w, 0, 0, 0, 
-    //                0, 2/h, 0, 0, 
-    //                0, 0, 2/l, 0, 
-    //                0, 0, 0, 1;
-
-    // projection = ortho_scale * ortho_translate * trans_ortho * projection;
-
-    eye_fov = eye_fov / 180 * MY_PI;
-    Eigen::Matrix4f aspect_fovY;
-    float ty = -1.0f / tan(eye_fov / 2.0f);
-    aspect_fovY << (ty / aspect_ratio), 0, 0, 0,
-        0, ty, 0, 0,
-        0, 0, (zNear+zFar)/(zNear-zFar), (-2*zNear*zFar)/(zNear-zFar),
-        0, 0, 1, 0;
-    projection = aspect_fovY * projection;
-
+    projection = ortho * persp_to_ortho * projection;
 
     return projection;
 }
@@ -275,7 +259,7 @@ int main(int argc, const char** argv)
 {
     std::vector<Triangle*> TriangleList;
 
-    float angle = -45.0;
+    float angle = 140.0;
     bool command_line = false;
 
     std::string filename = "output.png";
@@ -283,8 +267,8 @@ int main(int argc, const char** argv)
     std::string obj_path = "../models/spot/";
 
     // Load .obj File
-    // bool loadout = Loader.LoadFile("../models/spot/spot_triangulated_good.obj");
-    bool loadout = Loader.LoadFile("../models/spot/knife.obj");
+    bool loadout = Loader.LoadFile("../models/spot/spot_triangulated_good.obj");
+    // bool loadout = Loader.LoadFile("../models/spot/knife.obj");
     for(auto mesh:Loader.LoadedMeshes)
     {
         for(int i=0;i<mesh.Vertices.size();i+=3)
