@@ -9,5 +9,7 @@ FinalProject/References/
 OpenCV-msvc/
 bin/
 !Ass1/bin/output.png
+!Ass3/bin/output_normal.png
+!Ass3/bin/knife_normal.png
 !Ass1/bin/rotate180.png
 .vscode/
